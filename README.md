@@ -1,84 +1,109 @@
+以下は、あなたのLaravel 10プロジェクト導入手順に対する**文法の調整・情報の明確化・実用的な補足を加えた修正版**です。内容は極力そのままに、読みやすさと実用性を高めました。
+
+---
 
 # Laravel 10 プロジェクト導入手順
 
 ## 1. 前提条件
 
-* **Docker Desktop** がインストールされていること
-* **PHP 8.2** 以上が動作するコンテナ環境（Dockerを利用）
-* **Composer** がインストールされていること
-* **Git** がインストールされていること
+以下のソフトウェアがインストール済みであること：
+
+* **Docker Desktop**
+* **Git**
+* **Composer**
+* PHP 8.2 以上が動作する **Docker コンテナ環境**
+
+---
 
 ## 2. プロジェクトのセットアップ
 
 ### 2.1 プロジェクト作成
 
-まず、作業ディレクトリに移動します。
+まず、作業用ディレクトリに移動します：
 
-```
+```bash
 cd /path/to/your/project-directory
 ```
 
-次に、Laravel 10のプロジェクトを作成します（この手順ではコンテナ内で実行します）。
+次に、Docker コンテナ内で Laravel 10 のプロジェクトを作成します：
 
 ```bash
 docker-compose exec php bash
 composer create-project "laravel/laravel=10.*" . --prefer-dist
 ```
 
-これで、Laravel 10のベースとなるファイル一式がプロジェクトディレクトリにインストールされます。
+これで Laravel 10 のベースファイルがプロジェクトディレクトリにインストールされます。
+
+---
 
 ### 2.2 アプリケーションキーの生成
 
-プロジェクトが正常にインストールされたら、アプリケーションキーを生成します。
+Laravel プロジェクトの初期化後、アプリケーションキーを生成します：
 
 ```bash
 php artisan key:generate
 ```
 
-これで、`.env` ファイルにアプリケーションキーが設定されます。
+`.env` ファイルに `APP_KEY` が自動で設定されます。
 
-### 2.3 必要なディレクトリのパーミッション変更
+---
 
-`storage` と `bootstrap/cache` ディレクトリに書き込み権限を与えます。
+### 2.3 ディレクトリのパーミッション設定
+
+`storage` および `bootstrap/cache` ディレクトリに書き込み権限を与えます：
 
 ```bash
 chmod -R 777 storage bootstrap/cache
 ```
 
-（注意：本番環境では `777` のパーミッションは使用しないことを推奨します。開発環境でのみ使用）
+> ⚠️ 開発環境のみで使用。**本番環境ではより厳格なパーミッション設定**が推奨されます。
 
-### 2.4 DB接続の設定
+---
 
-`.env` ファイルを開き、以下の項目を修正します（必要に応じて）。
+### 2.4 データベース接続の設定
+
+`.env` ファイルを開き、以下の値を適切に設定します：
 
 ```dotenv
 DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
+DB_HOST=db  # docker-compose.ymlのservice名と一致させる（例：db）
 DB_PORT=3306
 DB_DATABASE=your_database_name
 DB_USERNAME=your_username
 DB_PASSWORD=your_password
 ```
 
-DB設定を完了したら、マイグレーションを実行します。
+設定後、マイグレーションを実行します：
 
 ```bash
 php artisan migrate
 ```
 
+---
+
 ## 3. 開発サーバーの起動
 
-開発サーバーを起動して、アプリケーションが正常に動作しているか確認します。
+以下のコマンドで Laravel の開発サーバーを起動します：
 
 ```bash
 php artisan serve
 ```
 
-これで、[http://127.0.0.1:8000](http://127.0.0.1:8000) にアクセスして、Laravelの初期画面が表示されることを確認します。
+ブラウザで [http://127.0.0.1:8000](http://127.0.0.1:8000) にアクセスし、Laravel の初期画面が表示されるか確認してください。
 
-## 4. Gitの初期化（オプション）
+> Docker で Nginx を使用している場合は、`php artisan serve` の代わりにブラウザで `http://localhost` にアクセスします。
 
-プロジェクトにGitを初期化して、コードのバージョン管理を始めます。
+---
+
+以下のように、`.gitignore` が自動で作成されなかった点を追記しました。これで Git 初期化時に `.gitignore` を手動で作成する方法が明確になります。
+
+---
+
+## 4. Git の初期化（任意）
+
+Git を使用してソースコードをバージョン管理する場合は、以下の手順を実行します：
+
+### 4.1 Git 初期化
 
 ```bash
 git init
@@ -86,11 +111,32 @@ git add .
 git commit -m "Initial commit"
 ```
 
-## 5. その他の設定（オプション）
+### 4.2 `.gitignore` の作成
 
-### 5.1 認証機能の追加（Laravel Breezeの場合）
+Laravel プロジェクトを作成した際、`.gitignore` が自動で作成されない場合があります。手動で `.gitignore` を作成するために、以下の内容を `.gitignore` ファイルに追加します：
 
-認証機能を追加する場合、Laravel Breezeをインストールします。
+```plaintext
+/vendor
+/node_modules
+/public/storage
+/storage/*.key
+/.env
+/.idea
+/.vscode
+```
+
+その後、`.gitignore` を Git に追加して、コミットします：
+
+```bash
+git add .gitignore
+git commit -m "Add .gitignore"
+```
+
+---
+
+## 5. 認証機能の追加（任意）
+
+### Laravel Breeze を使用する場合：
 
 ```bash
 composer require laravel/breeze --dev
@@ -99,16 +145,18 @@ npm install && npm run dev
 php artisan migrate
 ```
 
-これで、認証機能が設定され、ログイン・登録ページが利用可能になります。
+これでログイン／ユーザー登録画面が使用可能になります。
 
 ---
 
 ## 6. まとめ
 
-これで、Laravel 10の環境が構築されました。
-今後はアプリケーションの機能追加や、設定の調整を行いながら開発を進めていきます。
+これで Laravel 10 のローカル開発環境が整いました。今後は以下のステップに進んでください：
+
+* 機能追加（ルーティング／コントローラー／Blade）
+* テーブル設計とマイグレーション追加
+* Laravel のパッケージ導入（必要に応じて）
 
 ---
 
-この手順をREADMEに書いておけば、誰でも同じ環境を再現できるので便利です。
-必要に応じて、追加の設定やカスタマイズ手順も加えていってくださいね！
+ご希望があれば、この内容を **README.md 用にマークダウン最適化**することも可能です。どうしますか？
