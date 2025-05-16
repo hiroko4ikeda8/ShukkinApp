@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Attendance;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,13 +16,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
 
-
-Route::view('dashboard', 'dashboard')
+// Route::middleware(['auth'])->group(function () {
+    Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::view('profile', 'profile')
+    Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
+
+    Route::get('/attendance', Attendance::class)->name('attendance');
+
+// });
 
 require __DIR__.'/auth.php';
