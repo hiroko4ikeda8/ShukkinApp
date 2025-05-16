@@ -17,15 +17,17 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'welcome')->name('home');
 
 // Route::middleware(['auth'])->group(function () {
-    Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+    // Route::view('dashboard', 'dashboard')
+    // ->middleware(['auth', 'verified'])
+    // ->name('dashboard');
 
-    Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
+    // Route::view('profile', 'profile')
+    // ->middleware(['auth'])
+    // ->name('profile');
 
-    Route::get('/attendance', Attendance::class)->name('attendance');
+Route::view('/dashboard', 'dashboard')->name('dashboard'); // ✅ 認証なしで表示できるように！
+Route::view('/profile', 'profile')->name('profile'); // ✅ 認証なしで表示できるように！
+Route::get('/attendance', Attendance::class)->name('attendance');
 
 // });
 

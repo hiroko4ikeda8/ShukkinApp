@@ -20,7 +20,8 @@
     </head>
     <body class="font-sans text-gray-900 antialiased bg-gray-100">
         <!-- ✅ ヘッダーの追加 -->
-        @include('livewire.layout.header-auth')
+            
+        @include('layouts.headers.header-auth')
 
 
         <div class="min-h-screen flex flex-col lg:flex-row lg:justify-center lg:items-center pt-6 sm:pt-0">
