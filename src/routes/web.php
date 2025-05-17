@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Livewire\Attendance;
 use Illuminate\Support\Facades\Route;
 
@@ -27,7 +28,11 @@ Route::view('/', 'welcome')->name('home');
 
 Route::view('/dashboard', 'dashboard')->name('dashboard'); // ✅ 認証なしで表示できるように！
 Route::view('/profile', 'profile')->name('profile'); // ✅ 認証なしで表示できるように！
-Route::get('/attendance', Attendance::class)->name('attendance');
+Route::view('/attendance', 'pages.attendance')->name('attendance');
+Route::view('/attendance/list', 'pages.attendance_list')->name('attendance.list');
+Route::view('/stamp_correction_request/list', 'pages.stamp_correction_request_list')->name('stamp_correction_request.list');
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
 
 // });
 

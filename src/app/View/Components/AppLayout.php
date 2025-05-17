@@ -10,8 +10,18 @@ class AppLayout extends Component
     /**
      * Get the view / contents that represents the component.
      */
-    public function render(): View
+    // public function render(): View
+    // {
+    // return view('layouts.app');
+    // }
+
+    // app/View/Components/AppLayout.php
+    public function render()
     {
-        return view('layouts.app');
+        return function (array $data) {
+            return view('layouts.app', [
+                'header' => $data['header'] ?? null,
+            ]);
+        };
     }
 }
