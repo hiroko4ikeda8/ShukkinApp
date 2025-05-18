@@ -34,7 +34,7 @@
             @endif
             --}}
 
-            <header class="bg-white shadow">
+            <header>
                 @include('layouts.headers.header-default')
             </header>
 

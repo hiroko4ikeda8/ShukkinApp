@@ -27,11 +27,11 @@
                     {{-- データがある場合は動的に表示 --}}
                     @foreach ($attendances as $attendance)
                         <tr class="border-t">
-                            <td class="p-3">{{ $attendance->date }}</td>
-                            <td class="p-3">{{ $attendance->start_time }}</td>
-                            <td class="p-3">{{ $attendance->end_time }}</td>
+                            <td class="p-3">{{ $attendance->attendance_date }}</td>
+                            <td class="p-3">{{ $attendance->clock_in }}</td>
+                            <td class="p-3">{{ $attendance->clock_out }}</td>
                             <td class="p-3">{{ $attendance->break_time }}</td>
-                            <td class="p-3">{{ $attendance->total_hours }}</td>
+                            <td class="p-3">{{ $attendance->total_work_time }}</td>
                             <td class="p-3 text-blue-600 font-semibold hover:underline">
                                 <a href="{{ route('attendance.details', ['id' => $attendance->id]) }}">詳細</a>
                             </td>
